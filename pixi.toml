@@ -1,0 +1,33 @@
+[workspace]
+name = "open-claude"
+version = "0.2.0-rc.1"
+description = "Claude Code transport for OpenCode V2"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "osx-64", "linux-64", "linux-aarch64"]
+
+[dependencies]
+nodejs = "24.*"
+
+[tasks]
+deps = "node scripts/deps.mjs"
+deps-update = "node scripts/deps.mjs --refresh"
+build = { cmd = "npm run build", depends-on = ["deps"] }
+test = { cmd = "npm test", depends-on = ["deps"] }
+check = { cmd = "npm run check", depends-on = ["deps"] }
+install = { cmd = "node scripts/install.mjs", depends-on = ["build"] }
+install-dev = { cmd = "node scripts/install.mjs --dev", depends-on = ["build"] }
+rollback = { cmd = "node scripts/install.mjs --rollback", depends-on = ["deps"] }
+login = { cmd = "node dist/cli.js login", depends-on = ["build"] }
+status = { cmd = "node dist/cli.js status", depends-on = ["build"] }
+doctor = { cmd = "node dist/cli.js doctor", depends-on = ["build"] }
+pack = { cmd = "node scripts/pack.mjs", depends-on = ["build"] }
+smoke-host = { cmd = "node scripts/smoke-opencode.mjs", depends-on = ["build"] }
+e2e = { cmd = "node scripts/smoke-opencode.mjs --offline", depends-on = ["build"] }
+smoke-live = { cmd = "node scripts/smoke-live.mjs", depends-on = ["build"] }
+smoke-live-host = { cmd = "node scripts/smoke-opencode.mjs --live", depends-on = ["build"] }
+smoke-package = { cmd = "node scripts/smoke-package.mjs", depends-on = ["build"] }
+test-live = { cmd = "node scripts/smoke-opencode.mjs --suite", depends-on = ["build"] }
+smoke-deployment = { cmd = "node scripts/smoke-deployment.mjs", depends-on = ["build"] }
+release-check = { cmd = "node scripts/release-check.mjs", depends-on = ["build"] }
+soak = { cmd = "node scripts/soak.mjs", depends-on = ["build"] }
+smoke-refresh = { cmd = "node scripts/smoke-refresh.mjs", depends-on = ["build"] }

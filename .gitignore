@@ -1,0 +1,7 @@
+.pixi/
+node_modules/
+dist/
+*.tgz
+.DS_Store
+test-results/
+.open-claude-deps.lock

@@ -1,0 +1,37 @@
+{
+  "name": "opencode-open-claude",
+  "version": "0.2.0-rc.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "Native Anthropic protocol backed by a bundled Claude Code transport for OpenCode V2",
+  "exports": {
+    ".": "./dist/plugin.js"
+  },
+  "files": [
+    "dist",
+    "server.ts",
+    "docs",
+    "CHANGELOG.md",
+    "npm-shrinkwrap.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test --test-timeout=60000 test/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.3.296",
+    "jsonc-parser": "3.3.1"
+  },
+  "devDependencies": {
+    "@opencode/plugin": "2.0.26",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3"
+  }
+}

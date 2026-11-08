@@ -1,0 +1,34 @@
+# Private release candidate checklist
+
+The target is a reliable private installation on the verified platform, not a claim of universal compatibility. Do not mark a gate passed solely because a model says it worked.
+
+- [x] Dependency preparation is incremental and does not reinstall on routine commands.
+- [x] Installations are immutable snapshots; updating does not rewrite the prior artifact.
+- [x] Requests have separate startup, upstream-idle, and total deadlines.
+- [x] Truncated SSE streams fail explicitly; valid response bytes remain unchanged.
+- [x] Runtime failures are classified without logging prompts, stderr, or credentials.
+- [x] Upstream 401 reaches the official runtime for one bounded refresh opportunity; inference failures are not secretly retried.
+- [x] Cancellation/unload waits for bounded owned-process cleanup, including stubborn runtimes.
+- [x] An abrupt host crash terminates the owned runtime in the tested POSIX supervisor path.
+- [x] OAuth URL framing, cancellation, timeout, auto-completion, and invalid codes have regression tests.
+- [x] Concurrent synthetic requests remain isolated, with capacity/backpressure tests.
+- [x] Real host tests cover MCP/Code Mode, variants, images, compaction, and forks.
+- [x] Production archive installation and rollback are tested.
+- [x] Production dependency audit has no unresolved advisories; development advisories are triaged.
+- [x] A reproducible offline release check and explicit live checks are documented.
+- [x] Platform/version support and remaining external-host limitations are documented accurately.
+
+## Evidence and scope
+
+- `pixi run release-check`: type checking, offline unit/integration tests, native host round trip, truncated/stalled/disconnected stream failures, production-only archive, independent snapshot/update/rollback, and production audit.
+- `test/concurrency.test.ts`: 24 isolated requests, capacity accounting during body upload, bounded upstream production with a paused consumer, and upstream cancellation on disconnect.
+- `pixi run test-live`: independently observed tools/files/tests, recall/forks, compaction, both MCP paths, effort switching, and vision. The shell rejection-feedback host defect is reported separately, not counted as a pass.
+- `pixi run smoke-refresh`: one injected 401, two attempts, changed credential, then successful real inference. No credential files inspected or copied.
+- Five-minute soak: six successful real requests, including requests following the explicit refresh test.
+- `pixi run doctor`: runtime matches SDK pin and isolated store is signed in.
+
+Verified environment: macOS arm64, OpenCode host 2.0.18, plugin types 2.0.26, Node 24, SDK 0.3.296 / Claude Code 2.1.296. Test reports are local under `test-results/` and are not package contents.
+
+**Release decision:** suitable as a private macOS arm64 release candidate, not a generally certified stable release. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
+
+Long-duration token renewal and other platforms require their own evidence. A short local test run cannot certify them.
