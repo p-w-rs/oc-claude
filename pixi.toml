@@ -1,6 +1,6 @@
 [workspace]
 name = "open-claude"
-version = "0.2.0-rc.1"
+version = "0.2.0-rc.2"
 description = "Claude Code transport for OpenCode V2"
 channels = ["conda-forge"]
 platforms = ["osx-arm64", "osx-64", "linux-64", "linux-aarch64"]
@@ -17,6 +17,7 @@ check = { cmd = "npm run check", depends-on = ["deps"] }
 install = { cmd = "node scripts/install.mjs", depends-on = ["build"] }
 install-dev = { cmd = "node scripts/install.mjs --dev", depends-on = ["build"] }
 rollback = { cmd = "node scripts/install.mjs --rollback", depends-on = ["deps"] }
+uninstall = { cmd = "node scripts/install.mjs --uninstall", depends-on = ["deps"] }
 login = { cmd = "node dist/cli.js login", depends-on = ["build"] }
 status = { cmd = "node dist/cli.js status", depends-on = ["build"] }
 doctor = { cmd = "node dist/cli.js doctor", depends-on = ["build"] }
@@ -31,3 +32,5 @@ smoke-deployment = { cmd = "node scripts/smoke-deployment.mjs", depends-on = ["b
 release-check = { cmd = "node scripts/release-check.mjs", depends-on = ["build"] }
 soak = { cmd = "node scripts/soak.mjs", depends-on = ["build"] }
 smoke-refresh = { cmd = "node scripts/smoke-refresh.mjs", depends-on = ["build"] }
+release-archive = { cmd = "node scripts/release-archive.mjs", depends-on = ["build"] }
+smoke-bootstrap = { cmd = "node scripts/smoke-bootstrap.mjs", depends-on = ["build"] }

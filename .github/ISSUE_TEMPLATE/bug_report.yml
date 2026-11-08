@@ -1,0 +1,26 @@
+name: Bug report
+description: Report an installation or provider problem
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include tokens, OAuth URLs/codes, credentials, prompts, or unredacted logs. Run `pixi run doctor` for safe runtime diagnostics."
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS/architecture, OpenCode version, Pixi version, plugin version, and doctor output
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the visible error, with sensitive details removed
+    validations:
+      required: true

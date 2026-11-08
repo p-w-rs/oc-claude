@@ -4,10 +4,16 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse, modify, applyEdits } from "jsonc-parser";
 import { deploy, releaseDirectory, verifyRelease } from "./deploy.mjs";
+import { checkHost } from "./preflight.mjs";
 
 // Local directory plugins are idiomatic V2. Activate a verified snapshot without
 // changing the model selection, unrelated settings, or an in-flight artifact.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const uninstall = process.argv.includes("--uninstall");
+const allowed = new Set(["--dev", "--rollback", "--uninstall"]);
+if (process.argv.slice(2).some(arg => !allowed.has(arg))) throw new Error("Usage: install.mjs [--dev | --rollback | --uninstall]");
+if (process.argv.slice(2).length > 1) throw new Error("Choose one installation operation at a time");
+if (!uninstall) checkHost();
 const directory = join(process.env.XDG_CONFIG_HOME || join(homedir(), ".config"), "opencode");
 await mkdir(directory, { recursive: true });
 const dev = process.argv.includes("--dev");
@@ -42,7 +48,7 @@ try {
     catch (error) { if (error.code !== "ENOENT") throw error; }
   }
   if (rollback && !state.previous) throw new Error("No previous managed release is available for rollback");
-  const target = dev ? root : rollback ? state.previous : await deploy(root);
+  const target = uninstall ? undefined : dev ? root : rollback ? state.previous : await deploy(root);
   if (rollback) await verifyRelease(target);
 
   const entryPath = entry => typeof entry === "string" ? entry : entry?.package;
@@ -50,11 +56,13 @@ try {
     const path = entryPath(entry);
     return typeof path === "string" && (path === root || path.startsWith(`${releaseDirectory()}/`)) ? [index] : [];
   });
-  const installed = owned.length === 1 && entryPath(plugins[owned[0]]) === target;
+  const installed = uninstall ? owned.length === 0 : owned.length === 1 && entryPath(plugins[owned[0]]) === target;
   if (!installed) {
     const format = { formattingOptions: { insertSpaces: true, tabSize: 2 } };
     let updated = source;
-    if (!Array.isArray(config.plugins)) updated = applyEdits(updated, modify(updated, ["plugins"], [target], format));
+    if (uninstall) {
+      for (const index of [...owned].reverse()) updated = applyEdits(updated, modify(updated, ["plugins", index], undefined, format));
+    } else if (!Array.isArray(config.plugins)) updated = applyEdits(updated, modify(updated, ["plugins"], [target], format));
     else if (!owned.length) updated = applyEdits(updated, modify(updated, ["plugins", plugins.length], target, format));
     else {
       const first = owned[0];
@@ -74,13 +82,18 @@ try {
     await writeFile(temporary, updated, { mode: 0o600, flag: "wx" });
     await rename(temporary, path);
   }
-  if (!dev && state.current !== target) {
+  if (!dev && !uninstall && state.current !== target) {
     await mkdir(releaseDirectory(), { recursive: true, mode: 0o700 });
     const temporary = `${statePath}.${process.pid}.tmp`;
     await writeFile(temporary, JSON.stringify({ current: target, previous: state.current }, null, 2) + "\n", { mode: 0o600 });
     await rename(temporary, statePath);
   }
-  console.log(`OpenClaude ${installed ? "already installed" : "installed"} in ${path}`);
-  console.log(`Plugin: ${target}${dev ? " (development link)" : " (immutable release snapshot)"}`);
-  console.log("OpenCode watches configuration. Use /reload if needed, then /connect → Claude Code (OpenClaude), then /models.");
+  if (uninstall) {
+    console.log(`OpenClaude ${installed ? "already absent" : "removed"} from ${path}`);
+    console.log("Credentials, release snapshots, and unrelated settings were preserved. Use /reload if needed.");
+  } else {
+    console.log(`OpenClaude ${installed ? "already installed" : "installed"} in ${path}`);
+    console.log(`Plugin: ${target}${dev ? " (development link)" : " (immutable release snapshot)"}`);
+    console.log("OpenCode watches configuration. Use /reload if needed, then /connect → Claude Code (OpenClaude), then /models.");
+  }
 } finally { await unlink(guard); }

@@ -1,22 +1,36 @@
 # OpenClaude for OpenCode V2
 
+[![Release checks](https://github.com/p-w-rs/open-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/p-w-rs/open-claude/actions/workflows/ci.yml)
+
 A local provider plugin that uses its **own pinned Claude Code binary** for sign-in and authenticated transport. OpenCode remains the only agent: its instructions, history, tools, permissions, compaction, forks, and model variants remain authoritative.
 
-**Status: 0.2.0-rc.1 — hardened private release candidate for macOS arm64.** Real account sign-in, official-runtime credential refresh after an injected 401, native tools, MCP/Code Mode, effort changes, images, forks, and compaction have live coverage. Crash/fault handling and deployment have offline regression tests. This is not yet an unqualified stable release: other platforms and naturally occurring long-duration token expiry still need evidence. The relay depends on Claude Code's current HTTP behavior, not a promised provider API.
+**Status: 0.2.0-rc.2 — public release candidate.** Ready for early adopters, with live verification on macOS arm64. Installation, crash/fault handling, packaging, and updates have offline regression coverage. Linux/Intel macOS and natural long-duration token expiry have not yet been certified; these are disclosed limitations, not installation blockers. This is an unofficial integration dependent on Claude Code's current HTTP behavior, not a promised provider API or a vendor-endorsed way to use a subscription. Check the terms applicable to your account before using it.
 
 ## Install
 
-Only [Pixi](https://pixi.sh) is needed to prepare/develop/install this plugin. OpenCode V2 is the host application; a separate Node, npm, Bun, Python, or Claude Code installation is unnecessary.
+Requires **[OpenCode V2](https://opencode.ai/v2/docs/) 2.0.18 or newer in the 2.x family**, **[Pixi](https://pixi.sh)**, and an account eligible to sign into Claude Code. macOS/Linux on arm64/x64 are supported installation targets; Windows is not supported. Install commands download dependencies and the pinned runtime, so internet access is required. No separate Node, npm, Bun, Python, or Claude Code installation is needed.
 
-From this directory:
+### Quick start
+
+Download and extract the source ZIP from GitHub's **Code → Download ZIP**, open a terminal in the extracted folder, and run:
 
 ```sh
-pixi run install
+pixi run --locked install
 ```
 
 This prepares the locked dependencies, compiles the plugin, and creates an independent production snapshot under `${XDG_DATA_HOME:-~/.local/share}/open-claude/releases/<version>-<hash>`. The snapshot has its own bundled runtime and production dependencies. OpenCode's **V2 `plugins` array** points to that snapshot, so subsequent development builds do not alter the active installation. Existing settings/comments are preserved; a private backup precedes configuration edits. Installation does not select a default model or publish anything.
 
-Run `pixi run install` again to update. It builds and verifies a new snapshot before changing configuration; prior releases are retained. `pixi run rollback` switches to the previous managed snapshot while preserving unrelated settings changed since installation. Rollback requires a previous managed installation. Snapshots detect accidental file changes with checksums; they are not cryptographically signed against same-user tampering.
+If you already use Git, the equivalent is:
+
+```sh
+git clone https://github.com/p-w-rs/open-claude.git
+cd open-claude
+pixi run --locked install
+```
+
+For a fixed version, use a tagged source download from the [Releases page](https://github.com/p-w-rs/open-claude/releases) when available, rather than the moving `main` branch. A release source archive plus `SHA256SUMS` can also be built locally with `pixi run release-archive`.
+
+To update, download/extract the new source (or `git pull --ff-only` in a clean checkout), then run `pixi run --locked install` there. If the lockfile changed, the dependency guard may request `pixi run deps-update` first. Installation builds and verifies a new snapshot before changing configuration; prior releases are retained. `pixi run rollback` switches to the previous managed snapshot while preserving unrelated settings. Rollback requires a previous managed installation. Snapshots detect accidental file changes with checksums; they are not cryptographically signed against same-user tampering. Configuration reload can interrupt active sessions, so update between tasks.
 
 In OpenCode:
 
@@ -35,7 +49,9 @@ For a development link instead of an immutable installation, use `pixi run insta
 }
 ```
 
-Do not add a manual provider definition. The plugin registers its provider, model catalog, and OAuth integration itself. To uninstall, remove its snapshot/development-directory entry from `plugins`; no other settings need changing. Credentials and prior snapshots are not deleted automatically. A development link intentionally follows builds in the linked directory.
+Do not add a manual provider definition. The plugin registers its provider, model catalog, and OAuth integration itself. To uninstall, run `pixi run uninstall`, or remove its snapshot/development-directory entry from `plugins` manually. Unrelated settings, credentials and prior snapshots are preserved. A development link intentionally follows builds in the linked directory.
+
+Need help? See [troubleshooting](docs/troubleshooting.md) or [report a bug](https://github.com/p-w-rs/open-claude/issues).
 
 ## How it works
 
@@ -95,11 +111,14 @@ pixi run test-live  # broader live acceptance suite; consumes subscription allow
 pixi run smoke-refresh # inject one 401; official runtime refreshes its own token
 pixi run soak      # periodic small real requests (10 minutes by default)
 pixi run pack       # creates a local npm archive; nothing is published
+pixi run release-archive # source download + SHA256SUMS, no Git required
+pixi run smoke-bootstrap # clean source archive → Pixi install → real host loading
 ```
 
 `pixi.lock` pins the toolchain; `package-lock.json` pins npm dependencies and integrity hashes. Dependencies are prepared incrementally by npm **inside Pixi**, with lifecycle scripts disabled. Routine commands do not reinstall them. A changed/inconsistent development installation requires explicit `pixi run deps-update`; immutable installed releases are unaffected. Local archives include an npm shrinkwrap generated from the tested lockfile. The SDK platform package supplies the native binary. Offline fixtures use dummy keys/synthetic credentials and never copy real credentials. Host tests require `opencode` on PATH and use temporary configuration and an in-memory database. Commands labeled live/soak/refresh use your real sign-in and allowance.
 
 See [docs/testing.md](docs/testing.md) for live-suite coverage, manual UI prompts, and interpreting failures.
+See [docs/releasing.md](docs/releasing.md) for CI and reproducible release preparation. CI never receives subscription credentials.
 
 Validated locally on macOS arm64 / OpenCode **2.0.18**, with types from `@opencode/plugin` **2.0.26**, and bundled Claude Code **2.1.296** (`claude-agent-sdk` **0.3.296**). Linux and Intel macOS are declared Pixi targets, not yet exercised. Newer V2 hosts use package exports; `server.ts` supports the early V2 directory loader.
 
@@ -111,5 +130,3 @@ Validated locally on macOS arm64 / OpenCode **2.0.18**, with types from `@openco
 - Requests go through Anthropic's Messages endpoint only: no Bedrock, Vertex, enterprise inference gateway, WebSockets, or Claude remote-session transport.
 - Fresh runtime processes add startup overhead. Managed runtime customizations and runtime/upstream changes need compatibility testing on every upgrade.
 - Source is available publicly; the npm package remains private and is not published. Public visibility does not grant a license: this project is currently `UNLICENSED`. The pinned SDK/native runtime retains its own license. Production dependency auditing is a release gate. Development-only OpenCode SDK advisories are explicitly triaged in [docs/security.md](docs/security.md), not hidden with forced dependency overrides.
-
-The earlier plugin in `agent-experts/third-party/plugins/opencode-claude` was inspected for lessons, not copied into this implementation. The linked Twigpine project is currently a separate coding-agent application, not a V2 provider plugin.

@@ -1,6 +1,6 @@
-# Private release candidate checklist
+# Public release candidate checklist
 
-The target is a reliable private installation on the verified platform, not a claim of universal compatibility. Do not mark a gate passed solely because a model says it worked.
+The target is a reliable public candidate with honest support boundaries, not a claim of universal compatibility. Do not mark a gate passed solely because a model says it worked. Missing hardware and long-duration coverage are disclosed limitations, not blockers for this candidate.
 
 - [x] Dependency preparation is incremental and does not reinstall on routine commands.
 - [x] Installations are immutable snapshots; updating does not rewrite the prior artifact.
@@ -20,7 +20,7 @@ The target is a reliable private installation on the verified platform, not a cl
 
 ## Evidence and scope
 
-- `pixi run release-check`: type checking, offline unit/integration tests, native host round trip, truncated/stalled/disconnected stream failures, production-only archive, independent snapshot/update/rollback, and production audit.
+- `pixi run release-check`: type checking, offline unit/integration tests, native host round trip, truncated/stalled/disconnected stream failures, production-only archive, independent snapshot/update/rollback, clean source-download bootstrap through Pixi, and production audit.
 - `test/concurrency.test.ts`: 24 isolated requests, capacity accounting during body upload, bounded upstream production with a paused consumer, and upstream cancellation on disconnect.
 - `pixi run test-live`: independently observed tools/files/tests, recall/forks, compaction, both MCP paths, effort switching, and vision. The shell rejection-feedback host defect is reported separately, not counted as a pass.
 - `pixi run smoke-refresh`: one injected 401, two attempts, changed credential, then successful real inference. No credential files inspected or copied.
@@ -29,6 +29,8 @@ The target is a reliable private installation on the verified platform, not a cl
 
 Verified environment: macOS arm64, OpenCode host 2.0.18, plugin types 2.0.26, Node 24, SDK 0.3.296 / Claude Code 2.1.296. Test reports are local under `test-results/` and are not package contents.
 
-**Release decision:** suitable as a private macOS arm64 release candidate, not a generally certified stable release. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
+**Release decision:** public candidate for early adopters. macOS arm64 is locally verified; other targets are not claimed verified merely because CI is configured. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
+
+Public-readiness additions in rc.2: Git-free installation instructions, supported-host preflight, safe uninstall, source archive/checksum generation, clean bootstrap acceptance, pinned read-only Linux/macOS CI, a bug-report template, and troubleshooting/release procedures. Existing license metadata remains unchanged at the owner's request.
 
 Long-duration token renewal and other platforms require their own evidence. A short local test run cannot certify them.

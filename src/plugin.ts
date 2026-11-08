@@ -53,7 +53,7 @@ export async function setupWithBridge(ctx: Plugin.Context, factory: typeof start
     await ctx.command.transform(editor => {
       editor.add({
         name: "claude-login-cancel", description: "Cancel the active bundled Claude Code sign-in",
-        execute: async () => { login.cancel(); },
+        execute: async () => { await login.cancel(); },
       });
     });
     await ctx.session.hook("http.response", async event => {

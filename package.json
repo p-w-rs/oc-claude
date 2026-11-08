@@ -1,10 +1,13 @@
 {
   "name": "opencode-open-claude",
-  "version": "0.2.0-rc.1",
+  "version": "0.2.0-rc.2",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
   "description": "Native Anthropic protocol backed by a bundled Claude Code transport for OpenCode V2",
+  "repository": { "type": "git", "url": "https://github.com/p-w-rs/open-claude.git" },
+  "bugs": { "url": "https://github.com/p-w-rs/open-claude/issues" },
+  "homepage": "https://github.com/p-w-rs/open-claude#readme",
   "exports": {
     ".": "./dist/plugin.js"
   },

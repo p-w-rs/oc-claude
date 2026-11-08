@@ -1,5 +1,17 @@
 # Changes
 
+## 0.2.0-rc.2 — public installation and release tooling
+
+- Public quickstart with Git-free download installation, update/uninstall instructions, and troubleshooting.
+- Fail early on unsupported platforms, missing OpenCode, and incompatible host versions before editing configuration.
+- Safe, idempotent uninstall preserving credentials, snapshots, and unrelated settings.
+- Source download packaging with SHA-256 checksum and a clean-download Pixi bootstrap acceptance test.
+- SHA-pinned, read-only GitHub Actions release checks on Linux/macOS with a pinned OpenCode V2 host; no subscription secrets in CI.
+- Public bug-report template and maintainer release procedure.
+- Await login cancellation before returning from its command.
+
+Other-platform and naturally occurring long-duration token-expiry coverage remain disclosed limitations, not blockers for this public candidate. Existing license metadata is unchanged.
+
 ## 0.2.0-rc.1 — private release candidate
 
 - Separate startup, upstream-idle, total, and request-body deadlines.

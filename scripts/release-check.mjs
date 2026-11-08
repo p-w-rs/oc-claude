@@ -9,6 +9,7 @@ const checks = [
   ...["truncated", "stalled", "disconnected"].map(fault => [`native host ${fault} stream`, process.execPath, ["scripts/smoke-opencode.mjs", `--fault=${fault}`]]),
   ["production archive", process.execPath, ["scripts/smoke-package.mjs"]],
   ["immutable install and rollback", process.execPath, ["scripts/smoke-deployment.mjs"]],
+  ["clean source bootstrap", process.execPath, ["scripts/smoke-bootstrap.mjs"]],
   ["production dependency audit", "npm", ["audit", "--omit=dev", "--audit-level=low"]],
 ];
 const results = [];
