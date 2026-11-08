@@ -7,10 +7,14 @@ const supervised = new WeakMap<ChildProcess, Writable>();
 // unused host pipe. EOF (including SIGKILL of the host) terminates the runtime.
 // No daemon, PID scanning, or additional installed tool is needed on POSIX.
 // The executable and arguments are positional parameters, never shell source.
+// Save stdin before starting the asynchronous command: dash replaces fd 0 with
+// /dev/null for background jobs, even when their redirect says <&0.
 const SUPERVISOR = String.raw`
 exec 4<&3
-"$@" <&0 3<&- 4<&- &
+exec 5<&0
+"$@" <&5 3<&- 4<&- 5<&- &
 runtime=$!
+exec 5<&-
 (
   if ! IFS= read -r done <&4; then
     kill -TERM "$runtime" 2>/dev/null || exit 0
