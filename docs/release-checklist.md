@@ -27,7 +27,9 @@ The target is a reliable public candidate with honest support boundaries, not a 
 - Five-minute soak: six successful real requests, including requests following the explicit refresh test.
 - `pixi run doctor`: runtime matches SDK pin and isolated store is signed in.
 
-Verified environment: macOS arm64, OpenCode host 2.0.18, plugin types 2.0.26, Node 24, SDK 0.3.296 / Claude Code 2.1.296. Test reports are local under `test-results/` and are not package contents.
+Verified local environment: macOS arm64, OpenCode host 2.0.18, plugin types 2.0.26, Node 24, SDK 0.3.296 / Claude Code 2.1.296. Test reports are local under `test-results/` and are not package contents.
+
+Linux x64: the full offline job passed in [CI run 42448218223](https://github.com/p-w-rs/open-claude/actions/runs/42448218223), including 51 tests, actual bundled-runtime routing, native host faults, packaging, deployment/rollback, clean Pixi bootstrap and production audit. That run's overall cancellation came from GitHub rejecting the retired macOS runner before it started; it does not negate the completed Linux job. The workflow now targets macOS 15. Linux live-account OAuth/inference remains unverified.
 
 **Release decision:** public candidate for early adopters. macOS arm64 is locally verified; other targets are not claimed verified merely because CI is configured. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
 

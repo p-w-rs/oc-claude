@@ -4,7 +4,7 @@
 
 A local provider plugin that uses its **own pinned Claude Code binary** for sign-in and authenticated transport. OpenCode remains the only agent: its instructions, history, tools, permissions, compaction, forks, and model variants remain authoritative.
 
-**Status: 0.2.0-rc.2 — public release candidate.** Ready for early adopters, with live verification on macOS arm64. Installation, crash/fault handling, packaging, and updates have offline regression coverage. Linux/Intel macOS and natural long-duration token expiry have not yet been certified; these are disclosed limitations, not installation blockers. This is an unofficial integration dependent on Claude Code's current HTTP behavior, not a promised provider API or a vendor-endorsed way to use a subscription. Check the terms applicable to your account before using it.
+**Status: 0.2.0-rc.2 — public release candidate.** Ready for early adopters, with live verification on macOS arm64 and the full offline release gate passing on Linux x64 CI. Installation, crash/fault handling, packaging, and updates have offline regression coverage. Other platform/live-account combinations and natural long-duration token expiry remain disclosed limitations, not installation blockers. This is an unofficial integration dependent on Claude Code's current HTTP behavior, not a promised provider API or a vendor-endorsed way to use a subscription. Check the terms applicable to your account before using it.
 
 ## Install
 
@@ -120,7 +120,7 @@ pixi run smoke-bootstrap # clean source archive → Pixi install → real host l
 See [docs/testing.md](docs/testing.md) for live-suite coverage, manual UI prompts, and interpreting failures.
 See [docs/releasing.md](docs/releasing.md) for CI and reproducible release preparation. CI never receives subscription credentials.
 
-Validated locally on macOS arm64 / OpenCode **2.0.18**, with types from `@opencode/plugin` **2.0.26**, and bundled Claude Code **2.1.296** (`claude-agent-sdk` **0.3.296**). Linux and Intel macOS are declared Pixi targets, not yet exercised. Newer V2 hosts use package exports; `server.ts` supports the early V2 directory loader.
+Validated locally on macOS arm64 / OpenCode **2.0.18**, with types from `@opencode/plugin` **2.0.26**, and bundled Claude Code **2.1.296** (`claude-agent-sdk` **0.3.296**). Linux x64 has passed the full offline CI gate, including actual bundled-runtime and native OpenCode host tests; live OAuth/inference there is not certified. Intel macOS and Linux arm64 remain declared Pixi targets without verification evidence. Newer V2 hosts use package exports; `server.ts` supports the early V2 directory loader.
 
 ## Release gates / known limitations
 

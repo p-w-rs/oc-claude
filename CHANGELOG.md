@@ -9,6 +9,7 @@
 - SHA-pinned, read-only GitHub Actions release checks on Linux/macOS with a pinned OpenCode V2 host; no subscription secrets in CI.
 - Public bug-report template and maintainer release procedure.
 - Await login cancellation before returning from its command.
+- Fix Linux dash background-job stdin forwarding, discovered by the new CI gate; the Linux x64 offline release gate now passes.
 
 Other-platform and naturally occurring long-duration token-expiry coverage remain disclosed limitations, not blockers for this public candidate. Existing license metadata is unchanged.
 
