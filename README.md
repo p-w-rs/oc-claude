@@ -40,6 +40,23 @@ In OpenCode:
 
 OpenCode reloads changed configuration automatically; use `/reload` if needed. `/claude-login-cancel` stops an abandoned login. The terminal fallback is `pixi run login`; it signs into the same bundled runtime and isolated store.
 
+**Desktop users:** select an `open-claude/...` model after connecting; installing
+the plugin does not change your default model. Desktop's bundled service and a
+terminal `opencode --version` can be different versions. Check the Desktop version
+in the app. On macOS, the installer detects Desktop's bundled CLI automatically;
+otherwise a supported V2 CLI must be on PATH for preflight.
+No separate Node/npm/Claude Code installation is required. After snapshot
+installation, the downloaded source folder can be removed; keep Pixi and the
+managed release directory. Install or update between active tasks because config
+reload may interrupt work.
+
+You can also install [open-enhance](https://github.com/p-w-rs/open-enhance#setup)
+for opt-in checkpoints, Pixi policy and document evidence. Its macOS Apple Silicon
+and OpenCode 2.2.6+ requirements are stricter than OpenClaude's. Both installers
+preserve the other's config entry; you do not need to merge or replace your
+configuration manually. Neither project is published to npm. Both remain release
+candidates with disclosed limitations; `UNLICENSED` is not a license grant.
+
 For a development link instead of an immutable installation, use `pixi run install-dev`, or configure a project directly after `pixi run build`:
 
 ```jsonc

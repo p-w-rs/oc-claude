@@ -11,3 +11,14 @@ test("installation preflight accepts supported V2 and rejects old/missing hosts"
   assert.throws(() => checkHost({ platform: "linux", arch: "arm", run: () => ({}) }), /Unsupported platform/);
   assert.throws(() => checkHost({ run: () => ({ status: null, error: new Error("ENOENT") }) }), /not available on PATH/);
 });
+
+test("Desktop-only installs do not require a separate CLI on PATH", () => {
+  const calls: string[] = [];
+  const result = checkHost({ platform: "darwin", arch: "arm64", candidates: ["missing", "old", "/desktop/opencode-cli"], run: (command: string) => {
+    calls.push(command);
+    if (command === "missing") return { status: null, error: new Error("ENOENT") };
+    return { status: 0, stdout: command === "old" ? "opencode v2.0.17" : "opencode v2.2.6" };
+  } });
+  assert.equal(result.command, "/desktop/opencode-cli");
+  assert.deepEqual(calls, ["missing", "old", "/desktop/opencode-cli"]);
+});
