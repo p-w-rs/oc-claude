@@ -25,4 +25,4 @@ pixi run doctor
 
 To remove the plugin safely, run `pixi run uninstall`. It removes only managed plugin entries and preserves settings, credentials, and prior snapshots. If the source folder is unavailable, remove the corresponding entry from the global OpenCode `plugins` array manually.
 
-Report reproducible problems at <https://github.com/p-w-rs/open-claude/issues> with OS/architecture, plugin version, OpenCode version, safe doctor output, and minimal reproduction steps. Windows is not supported. Linux/Intel macOS targets should be treated according to the actual CI/test evidence, not assumed equivalent to Apple Silicon.
+Report reproducible problems at <https://github.com/p-w-rs/oc-claude/issues> with OS/architecture, plugin version, OpenCode version, safe doctor output, and minimal reproduction steps. Windows is not supported. Linux/Intel macOS targets should be treated according to the actual CI/test evidence, not assumed equivalent to Apple Silicon.

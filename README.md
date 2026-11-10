@@ -1,6 +1,6 @@
 # OpenClaude for OpenCode V2
 
-[![Release checks](https://github.com/p-w-rs/open-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/p-w-rs/open-claude/actions/workflows/ci.yml)
+[![Release checks](https://github.com/p-w-rs/oc-claude/actions/workflows/ci.yml/badge.svg)](https://github.com/p-w-rs/oc-claude/actions/workflows/ci.yml)
 
 A local provider plugin that uses its **own pinned Claude Code binary** for sign-in and authenticated transport. OpenCode remains the only agent: its instructions, history, tools, permissions, compaction, forks, and model variants remain authoritative.
 
@@ -23,12 +23,12 @@ This prepares the locked dependencies, compiles the plugin, and creates an indep
 If you already use Git, the equivalent is:
 
 ```sh
-git clone https://github.com/p-w-rs/open-claude.git
-cd open-claude
+git clone https://github.com/p-w-rs/oc-claude.git
+cd oc-claude
 pixi run --locked install
 ```
 
-For a fixed version, use a tagged source download from the [Releases page](https://github.com/p-w-rs/open-claude/releases) when available, rather than the moving `main` branch. A release source archive plus `SHA256SUMS` can also be built locally with `pixi run release-archive`.
+For a fixed version, use a tagged source download from the [Releases page](https://github.com/p-w-rs/oc-claude/releases) when available, rather than the moving `main` branch. A release source archive plus `SHA256SUMS` can also be built locally with `pixi run release-archive`.
 
 To update, download/extract the new source (or `git pull --ff-only` in a clean checkout), then run `pixi run --locked install` there. If the lockfile changed, the dependency guard may request `pixi run deps-update` first. Installation builds and verifies a new snapshot before changing configuration; prior releases are retained. `pixi run rollback` switches to the previous managed snapshot while preserving unrelated settings. Rollback requires a previous managed installation. Snapshots detect accidental file changes with checksums; they are not cryptographically signed against same-user tampering. Configuration reload can interrupt active sessions, so update between tasks.
 
@@ -50,7 +50,7 @@ installation, the downloaded source folder can be removed; keep Pixi and the
 managed release directory. Install or update between active tasks because config
 reload may interrupt work.
 
-You can also install [open-enhance](https://github.com/p-w-rs/open-enhance#setup)
+You can also install [open-enhance](https://github.com/p-w-rs/oc-enhance#setup)
 for opt-in checkpoints, Pixi policy and document evidence. Its macOS Apple Silicon
 and OpenCode 2.2.6+ requirements are stricter than OpenClaude's. Both installers
 preserve the other's config entry; you do not need to merge or replace your
@@ -68,7 +68,7 @@ For a development link instead of an immutable installation, use `pixi run insta
 
 Do not add a manual provider definition. The plugin registers its provider, model catalog, and OAuth integration itself. To uninstall, run `pixi run uninstall`, or remove its snapshot/development-directory entry from `plugins` manually. Unrelated settings, credentials and prior snapshots are preserved. A development link intentionally follows builds in the linked directory.
 
-Need help? See [troubleshooting](docs/troubleshooting.md) or [report a bug](https://github.com/p-w-rs/open-claude/issues).
+Need help? See [troubleshooting](docs/troubleshooting.md) or [report a bug](https://github.com/p-w-rs/oc-claude/issues).
 
 ## How it works
 
