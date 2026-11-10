@@ -1,5 +1,11 @@
 # Changes
 
+## 1.0.0 — release
+
+- Same code as 0.2.0-rc.2 plus the provider display name and a safer uninstall for one-line plugin arrays.
+- Release gates re-run on macOS arm64 with OpenCode 2.2.6: offline release check, live suite (8 passed, 1 known host issue) and credential refresh.
+- Listed in the [oc-plugins](https://github.com/p-w-rs/oc-plugins) installer.
+
 ## 0.2.0-rc.2 — public installation and release tooling
 
 - Public quickstart with Git-free download installation, update/uninstall instructions, and troubleshooting.

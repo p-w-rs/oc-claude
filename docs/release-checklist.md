@@ -1,4 +1,4 @@
-# Public release candidate checklist
+# Release checklist (1.0.0)
 
 The target is a reliable public candidate with honest support boundaries, not a claim of universal compatibility. Do not mark a gate passed solely because a model says it worked. Missing hardware and long-duration coverage are disclosed limitations, not blockers for this candidate.
 
@@ -31,7 +31,7 @@ Verified local environment: macOS arm64, OpenCode host 2.0.18, plugin types 2.0.
 
 Linux x64: the full offline job passed in [CI run 42448218223](https://github.com/p-w-rs/oc-claude/actions/runs/42448218223), including 51 tests, actual bundled-runtime routing, native host faults, packaging, deployment/rollback, clean Pixi bootstrap and production audit. That run's overall cancellation came from GitHub rejecting the retired macOS runner before it started; it does not negate the completed Linux job. The workflow now targets macOS 15. Linux live-account OAuth/inference remains unverified.
 
-**Release decision:** public candidate for early adopters. macOS arm64 is locally verified; other targets are not claimed verified merely because CI is configured. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
+**Release decision (1.0.0, 2026-11-10):** released after `pixi run release-check` (all offline gates, clean bootstrap, 0 production advisories), `pixi run test-live` (8 passed, 0 failed, 1 known host issue) and `pixi run smoke-refresh` (refresh with a changed credential, then success) on macOS arm64 with OpenCode 2.2.6. macOS arm64 is locally verified; other targets are not claimed verified merely because CI is configured. OpenCode configuration reload can interrupt active host sessions; independent snapshots prevent artifact mutation but do not guarantee uninterrupted host reloads.
 
 Public-readiness additions in rc.2: Git-free installation instructions, supported-host preflight, safe uninstall, source archive/checksum generation, clean bootstrap acceptance, pinned read-only Linux/macOS CI, a bug-report template, and troubleshooting/release procedures. Existing license metadata remains unchanged at the owner's request.
 

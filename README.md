@@ -4,7 +4,7 @@
 
 A local provider plugin that uses its **own pinned Claude Code binary** for sign-in and authenticated transport. OpenCode remains the only agent: its instructions, history, tools, permissions, compaction, forks, and model variants remain authoritative.
 
-**Status: 0.2.0-rc.2 — public release candidate.** Ready for early adopters, with live verification on macOS arm64 and the full offline release gate passing on Linux x64 CI. Installation, crash/fault handling, packaging, and updates have offline regression coverage. Other platform/live-account combinations and natural long-duration token expiry remain disclosed limitations, not installation blockers. This is an unofficial integration dependent on Claude Code's current HTTP behavior, not a promised provider API or a vendor-endorsed way to use a subscription. Check the terms applicable to your account before using it.
+**Status: 1.0.0.** Live verification on macOS arm64 and the full offline release gate passing on Linux x64 CI. Installation, crash/fault handling, packaging, and updates have offline regression coverage. Other platform/live-account combinations and natural long-duration token expiry remain disclosed limitations, not installation blockers. This is an unofficial integration dependent on Claude Code's current HTTP behavior, not a promised provider API or a vendor-endorsed way to use a subscription. Check the terms applicable to your account before using it.
 
 ## Install
 
@@ -50,12 +50,7 @@ installation, the downloaded source folder can be removed; keep Pixi and the
 managed release directory. Install or update between active tasks because config
 reload may interrupt work.
 
-You can also install [open-enhance](https://github.com/p-w-rs/oc-enhance#setup)
-for opt-in checkpoints, Pixi policy and document evidence. Its macOS Apple Silicon
-and OpenCode 2.2.6+ requirements are stricter than OpenClaude's. Both installers
-preserve the other's config entry; you do not need to merge or replace your
-configuration manually. Neither project is published to npm. Both remain release
-candidates with disclosed limitations; `UNLICENSED` is not a license grant.
+You can also install [oc-enhance](https://github.com/p-w-rs/oc-enhance) (task notes with Pause/Resume, document reading, project search, shared terminals), or every plugin at once with [oc-plugins](https://github.com/p-w-rs/oc-plugins). The installers preserve each other's config entries. `UNLICENSED` is not a license grant.
 
 For a development link instead of an immutable installation, use `pixi run install-dev`, or configure a project directly after `pixi run build`:
 

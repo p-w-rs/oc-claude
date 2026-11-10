@@ -22,7 +22,7 @@ if (command === "login") {
   const auth = await authStatusAsync().catch(error => ({ loggedIn: null, diagnostic: error.message }));
   console.log(JSON.stringify({
     runtime: runtimePath(), version, sdk: sdk.version, matchesPin, configDirectory: configDirectory(), auth,
-    platform: `${process.platform}-${process.arch}`, releaseStatus: "public release candidate; see docs/release-checklist.md",
+    platform: `${process.platform}-${process.arch}`, releaseStatus: "1.0.0; see docs/release-checklist.md",
   }, null, 2));
   if (result.error || result.status !== 0 || !matchesPin) process.exitCode = 1;
 } else {
