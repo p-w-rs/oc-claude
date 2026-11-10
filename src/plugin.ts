@@ -30,7 +30,7 @@ export async function setupWithBridge(ctx: Plugin.Context, factory: typeof start
         info: {
           id: PROVIDER_ID as Provider.ID, canonical: "anthropic" as Provider.ID,
           integrationID: PROVIDER_ID as Integration.ID,
-          name: "Claude Code (OpenClaude)", activation: "enabled",
+          name: "OpenClaude", activation: "enabled",
           package: "@opencode/ai/providers/anthropic",
           settings: { baseURL: `${bridge.baseURL}/v1`, apiKey: bridge.secret, encoding: "none", transport: "http", headerTimeout: false },
           headers: { "x-open-claude-token": bridge.secret },
@@ -39,13 +39,13 @@ export async function setupWithBridge(ctx: Plugin.Context, factory: typeof start
       });
     });
     await ctx.integration.transform(editor => {
-      editor.update(PROVIDER_ID, draft => { draft.name = "Claude Code (OpenClaude)"; });
+      editor.update(PROVIDER_ID, draft => { draft.name = "OpenClaude"; });
       editor.method.update({
         integrationID: PROVIDER_ID,
         method: { id: METHOD_ID, type: "oauth", label: "Sign in with bundled Claude Code" },
         authorize: () => login.authorize(),
         refresh: async () => {
-          if (!(await authStatusAsync()).loggedIn) throw new Error("Claude Code is signed out. Connect Claude Code (OpenClaude) again.");
+          if (!(await authStatusAsync()).loggedIn) throw new Error("Claude Code is signed out. Connect OpenClaude again.");
           return marker();
         },
       });
@@ -63,7 +63,7 @@ export async function setupWithBridge(ctx: Plugin.Context, factory: typeof start
         if (!connection || !ctx.integration.connection.status) return;
         await ctx.integration.connection.status({
           integrationID: PROVIDER_ID, connection,
-          status: event.response.status === 401 ? { status: "needs_auth", message: "Bundled Claude Code needs sign-in. Reconnect Claude Code (OpenClaude)." } : undefined,
+          status: event.response.status === 401 ? { status: "needs_auth", message: "Bundled Claude Code needs sign-in. Reconnect OpenClaude." } : undefined,
         });
       } catch { /* Connection status is best-effort UI metadata, not inference. */ }
     }, { providerID: PROVIDER_ID });

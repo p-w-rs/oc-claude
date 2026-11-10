@@ -14,7 +14,7 @@ pixi run doctor
 | --- | --- |
 | OpenCode missing or V1 detected | Install [OpenCode V2](https://opencode.ai/v2/docs/), ensure `opencode --version` reports 2.0.18 or newer in the 2.x family, then retry. Installation checks this before editing configuration. |
 | Provider not visible | Use `/reload`, then `/models`. Check that the global `plugins` array contains the snapshot printed by the installer. Do not add a manual provider definition. Project config may override global settings. |
-| Signed out / authentication failure | `/connect` → Claude Code (OpenClaude), and sign in. Ordinary `~/.claude` credentials are intentionally not used. Terminal fallback: `pixi run login`. |
+| Signed out / authentication failure | `/connect` → OpenClaude, and sign in. Ordinary `~/.claude` credentials are intentionally not used. Terminal fallback: `pixi run login`. |
 | Abandoned browser login | `/claude-login-cancel`, then reconnect. |
 | 429 / capacity or rate limit | Allow current work to finish and respect `retry-after`. Subscription limits and model entitlement are account-specific; this plugin does not bypass them. |
 | Stream stalled / incomplete | The request failed explicitly. Retry from OpenCode when appropriate; inspect partial tool/file changes first. The plugin does not secretly restart generation. |

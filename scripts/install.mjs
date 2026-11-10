@@ -60,15 +60,22 @@ try {
   if (!installed) {
     const format = { formattingOptions: { insertSpaces: true, tabSize: 2 } };
     let updated = source;
-    if (uninstall) {
-      for (const index of [...owned].reverse()) updated = applyEdits(updated, modify(updated, ["plugins", index], undefined, format));
-    } else if (!Array.isArray(config.plugins)) updated = applyEdits(updated, modify(updated, ["plugins"], [target], format));
-    else if (!owned.length) updated = applyEdits(updated, modify(updated, ["plugins", plugins.length], target, format));
-    else {
-      const first = owned[0];
-      updated = applyEdits(updated, modify(updated, typeof plugins[first] === "string" ? ["plugins", first] : ["plugins", first, "package"], target, format));
-      for (const index of owned.slice(1).reverse()) updated = applyEdits(updated, modify(updated, ["plugins", index], undefined, format));
+    const retarget = entry => typeof entry === "string" ? target : { ...entry, package: target };
+    const expected = !Array.isArray(config.plugins) ? [target]
+      : !owned.length ? [...plugins, target]
+      : plugins.flatMap((entry, index) => !owned.includes(index) ? [entry] : !uninstall && index === owned[0] ? [retarget(entry)] : []);
+    if (!uninstall && Array.isArray(config.plugins) && owned.length === 1) {
+      updated = applyEdits(updated, modify(updated, typeof plugins[owned[0]] === "string" ? ["plugins", owned[0]] : ["plugins", owned[0], "package"], target, format));
+    } else if (!uninstall && Array.isArray(config.plugins) && !owned.length) {
+      updated = applyEdits(updated, modify(updated, ["plugins", plugins.length], target, format));
+    } else {
+      // jsonc-parser 3.3.1 corrupts single-line arrays when removing an element, so removals rewrite the whole
+      // plugins array (comments inside that array are lost; the rest of the document is kept).
+      updated = applyEdits(updated, modify(updated, ["plugins"], expected, format));
     }
+    const check = [];
+    const reparsed = parse(updated, check, { allowTrailingComma: true });
+    if (check.length || JSON.stringify(reparsed?.plugins) !== JSON.stringify(expected)) throw new Error(`Refusing to write ${path}: the edited configuration did not come out as expected. Nothing was changed.`);
     if (existed) {
       if (await readFile(path, "utf8") !== source) throw new Error("OpenCode configuration changed during installation; retry without overwriting it.");
       const backup = `${path}.open-claude-${Date.now()}-${process.pid}.bak`;
@@ -94,6 +101,6 @@ try {
   } else {
     console.log(`OpenClaude ${installed ? "already installed" : "installed"} in ${path}`);
     console.log(`Plugin: ${target}${dev ? " (development link)" : " (immutable release snapshot)"}`);
-    console.log("OpenCode watches configuration. Use /reload if needed, then /connect → Claude Code (OpenClaude), then /models.");
+    console.log("OpenCode watches configuration. Use /reload if needed, then /connect → OpenClaude, then /models.");
   }
 } finally { await unlink(guard); }

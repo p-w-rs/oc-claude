@@ -34,9 +34,9 @@ To update, download/extract the new source (or `git pull --ff-only` in a clean c
 
 In OpenCode:
 
-1. `/connect` → **Claude Code (OpenClaude)** → **Sign in with bundled Claude Code**.
+1. `/connect` → **OpenClaude** → **Sign in with bundled Claude Code**.
 2. Finish Claude Code's own browser OAuth/SSO flow; paste its authorization code if requested.
-3. `/models` → choose a model under **Claude Code (OpenClaude)** (`open-claude/...`).
+3. `/models` → choose a model under **OpenClaude** (`open-claude/...`).
 
 OpenCode reloads changed configuration automatically; use `/reload` if needed. `/claude-login-cancel` stops an abandoned login. The terminal fallback is `pixi run login`; it signs into the same bundled runtime and isolated store.
 

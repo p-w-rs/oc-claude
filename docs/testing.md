@@ -56,7 +56,7 @@ The initial five-minute run completed six successful requests, including request
 
 ## Useful manual UI tests
 
-Use a separate disposable session with **Claude Code (OpenClaude)** selected. For any file-writing test, confine it to `scratch/plugin-check/`; do not let a test refactor the plugin itself.
+Use a separate disposable session with **OpenClaude** selected. For any file-writing test, confine it to `scratch/plugin-check/`; do not let a test refactor the plugin itself.
 
 ### Interactive question
 

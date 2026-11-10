@@ -302,7 +302,7 @@ export async function startBridge(options: BridgeOptions) {
           if (task.authenticationFailure) {
             const failure = task.authenticationFailure;
             if (!res.destroyed) { res.writeHead(failure.status, failure.headers); res.end(failure.body); }
-          } else error(res, authenticationError ? 401 : 502, "Claude Code exited before dispatch. Sign in using /connect → Claude Code (OpenClaude). If already signed in, run pixi run doctor.");
+          } else error(res, authenticationError ? 401 : 502, "Claude Code exited before dispatch. Sign in using /connect → OpenClaude. If already signed in, run pixi run doctor.");
           task.finish();
         }
       });

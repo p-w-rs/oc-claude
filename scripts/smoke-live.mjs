@@ -1,7 +1,7 @@
 import { startBridge } from "../dist/bridge.js";
 import { authStatus } from "../dist/runtime.js";
 
-if (!authStatus().loggedIn) throw new Error("Sign in first: /connect → Claude Code (OpenClaude), or pixi run login.");
+if (!authStatus().loggedIn) throw new Error("Sign in first: /connect → OpenClaude, or pixi run login.");
 const bridge = await startBridge({ cwd: process.cwd(), timeoutMs: 90_000 });
 try {
   const response = await fetch(`${bridge.baseURL}/v1/messages`, {

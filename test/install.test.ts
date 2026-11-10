@@ -80,3 +80,19 @@ test("development install preserves existing object options", async () => {
     assert.deepEqual(parse(await readFile(join(config, "opencode.jsonc"), "utf8")).plugins, [entry]);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
+
+test("uninstall of the last entry in a one-line plugins array keeps the config valid", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "open-claude-uninstall-middle-"));
+  const config = join(directory, "config", "opencode");
+  const data = join(directory, "data");
+  await mkdir(config, { recursive: true });
+  const path = join(config, "opencode.jsonc");
+  await writeFile(path, `{\n  // mine\n  "plugins": ["/first", "/last", "${join(data, "open-claude", "releases", "x")}"]\n}\n`);
+  try {
+    const result = spawnSync(process.execPath, ["scripts/install.mjs", "--uninstall"], { env: { ...process.env, XDG_CONFIG_HOME: join(directory, "config"), XDG_DATA_HOME: data }, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    const text = await readFile(path, "utf8");
+    assert.deepEqual(parse(text).plugins, ["/first", "/last"]);
+    assert.match(text, /\/\/ mine/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
